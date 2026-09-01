@@ -86,9 +86,8 @@ a{color:inherit;text-decoration:none}
 .row:hover{background:var(--chip)}
 .row .rk{width:18px;text-align:center;color:var(--ink3);font-weight:700;font-size:12.5px}
 .row .rk.top{color:var(--brand)}
-.logo{width:36px;height:36px;border-radius:50%;background:var(--chip);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--ink2);overflow:hidden;flex:0 0 36px;border:1px solid var(--line)}
-.logo img{width:100%;height:100%;object-fit:cover;display:none}
-.logo.has img{display:block}.logo.has span{display:none}
+.logo{position:relative;width:36px;height:36px;border-radius:50%;background:var(--chip);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--ink2);overflow:hidden;flex:0 0 36px;border:1px solid var(--line)}
+.logo img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff;display:block}
 .row .nm{flex:1;min-width:0}
 .row .nm b{display:block;font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .row .nm small{color:var(--ink3);font-size:12px}
@@ -117,7 +116,7 @@ td .n2{display:block;font-size:11px;color:var(--ink3);font-weight:400}
 .chk{color:var(--star);font-weight:600}
 
 /* news */
-.news-tools{display:flex;gap:6px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.news-tools{display:flex;gap:6px;align-items:center;margin-top:12px;flex-wrap:wrap;max-height:84px;overflow-y:auto}
 .n-item{display:flex;gap:12px;padding:11px 4px;border-bottom:1px solid var(--line)}
 .n-item:last-child{border-bottom:0}
 .n-item .t{width:50px;flex:0 0 50px;color:var(--ink3);font-size:12px;padding-top:3px}
@@ -327,14 +326,14 @@ const I18N={
    labValue:'거래대금 순',labG:'상승률 순',labL:'하락률 순',labT:'20일 평균 대비 대금 배수 순',advdec:'상승 / 하락 / 보합',turnoverK:'거래대금',hilo:'장중 고 / 저',vol:'거래량',ytd:'YTD',m1:'1개월',range:'장중 폭',fPrev:'외국인 (전일)',
    netbuy:'순매수',buy:'매수',sell:'매도',price:'현재가',chg:'등락',ratio20:'20일 평균 대비',fnet:'외국인 순매수',headlines:'화이트리스트 매체 헤드라인',sched:'일정',noNews:'최근 헤드라인 없음',noSched:'등록된 기업 일정 없음',noEv:'오늘 일정 없음',noEv2:'2주 내 일정 없음',
    exp:'예상',prev:'이전',act:'실제',imp:'중요도',pre:'발표 전 · 확인 필요',chk:'확인 필요',foot:'출처: IDX · Bank Indonesia · Kontan · Yahoo Finance · 화이트리스트 매체 RSS',footChk:'미확인 값은',footChk2:'표기',
-   now:'현재',close:'종가',prevClose:'전일종가',ixIHSG:'자카르타 종합',ixLQ:'대형 45종목',ixFX:'달러/루피아',fnetAll:'외국인 순매수 · 전체시장',prevLabel:'전일',src:'출처',idxNote:'IDX 실시간 공시',days:'일월화수목금토',day:'일',month:'월',dow:'요일',noAnn:'공시 없음',noData:'데이터 없음',noNewsTag:'해당 종목 뉴스 없음'},
+   now:'현재',close:'종가',prevClose:'전일종가',lastOk:'마지막 수신',retry:'재시도 중',noProxy:'실시간 프록시 연결 실패 (Worker 미설정)',ixIHSG:'자카르타 종합',ixLQ:'대형 45종목',ixFX:'달러/루피아',fnetAll:'외국인 순매수 · 전체시장',prevLabel:'전일',src:'출처',idxNote:'IDX 실시간 공시',days:'일월화수목금토',day:'일',month:'월',dow:'요일',noAnn:'공시 없음',noData:'데이터 없음',noNewsTag:'해당 종목 뉴스 없음'},
  id:{market:'Pasar',news:'Berita',cal:'Kalender',hot:'Berita utama',connecting:'Menghubungkan',updated:'Diperbarui',next:'Berikut',sec:'dtk',fx:'Kurs',demo:'Demo · snapshot 31/8',live:'Live',delay:' mnt tunda',liveIdx:'Live · IDX langsung',
    rank:'Peringkat saham',value:'Nilai transaksi',gainers:'Top gainer',losers:'Top loser',turnover:'Lonjakan nilai',status:'Kondisi pasar',foreign:'Investor asing',prevday:'Hari sebelumnya',ftop:'Net buy terbesar',fbot:'Net sell terbesar',macro:'Indikator pasar',macroSub:'Kurs · Yield · Komoditas',
    newsCard:'Berita emiten',all:'Semua',more:'Lihat semua ›',todayEv:'Agenda hari ini',calLink:'Kalender ›',ann:'Keterbukaan informasi',annSub:'Pengumuman IDX · 30 jam terakhir',calTitle:'Kalender',today:'Hari ini',macroCorp:'Makro+Emiten',macroOnly:'Makro',corpOnly:'Emiten',
    labValue:'Urut nilai transaksi',labG:'Urut kenaikan',labL:'Urut penurunan',labT:'Nilai vs rata-rata 20 hari',advdec:'Naik / Turun / Tetap',turnoverK:'Nilai transaksi',hilo:'Tertinggi / Terendah',vol:'Volume',ytd:'YTD',m1:'1 bulan',range:'Rentang harian',fPrev:'Asing (kemarin)',
    netbuy:'Net buy',buy:'Beli',sell:'Jual',price:'Harga',chg:'Perubahan',ratio20:'vs rata-rata 20 hari',fnet:'Net asing',headlines:'Headline media whitelist',sched:'Agenda',noNews:'Belum ada headline',noSched:'Tidak ada agenda emiten',noEv:'Tidak ada agenda hari ini',noEv2:'Tidak ada agenda 2 minggu ke depan',
    exp:'Perkiraan',prev:'Sebelumnya',act:'Aktual',imp:'Tingkat',pre:'Belum rilis · perlu konfirmasi',chk:'perlu konfirmasi',foot:'Sumber: IDX · Bank Indonesia · Kontan · Yahoo Finance · RSS media whitelist',footChk:'Nilai belum terverifikasi ditandai',footChk2:'',
-   now:'Sekarang',close:'Penutupan',prevClose:'Penutupan sebelumnya',ixIHSG:'Indeks Harga Saham Gabungan',ixLQ:'45 saham likuid',ixFX:'Dolar/Rupiah',fnetAll:'Net beli asing · seluruh pasar',prevLabel:'Sebelumnya',src:'Sumber',idxNote:'Pengumuman IDX real-time',days:'MinSenSelRabKamJumSab',day:'',month:'',dow:'',noAnn:'Belum ada pengumuman',noData:'Tidak ada data',noNewsTag:'Tidak ada berita untuk saham ini'}
+   now:'Sekarang',close:'Penutupan',prevClose:'Penutupan sebelumnya',lastOk:'terakhir diterima',retry:'mencoba lagi',noProxy:'proxy live gagal (Worker belum diset)',ixIHSG:'Indeks Harga Saham Gabungan',ixLQ:'45 saham likuid',ixFX:'Dolar/Rupiah',fnetAll:'Net beli asing · seluruh pasar',prevLabel:'Sebelumnya',src:'Sumber',idxNote:'Pengumuman IDX real-time',days:'MinSenSelRabKamJumSab',day:'',month:'',dow:'',noAnn:'Belum ada pengumuman',noData:'Tidak ada data',noNewsTag:'Tidak ada berita untuk saham ini'}
 };
 let LANG='ko';try{LANG=localStorage.getItem('idxlive_lang')||'ko';}catch(e){}
 const T=k=>(I18N[LANG]&&I18N[LANG][k])??I18N.ko[k]??k;
@@ -350,10 +349,13 @@ const fmt=(n,d=2)=>n==null?'—':Number(n).toLocaleString('en-US',{minimumFracti
 const sg=(n,d=2,suf='%',inv=false)=>{if(n==null)return'<span class="flat">—</span>';const c=(inv?-n:n)>0?'up':(inv?-n:n)<0?'dn':'flat';return`<span class="${c}">${n>0?'+':''}${fmt(n,d)}${suf}</span>`;};
 let IDRKRW=11.77,DATA=null,rankKey='value',newsTag=null,calDate=null,calImp=0,calKind='all';
 function idr(v){if(v==null)return'—';const a=Math.abs(v),s=a>=1e12?`Rp${fmt(v/1e12,2)}조`:a>=1e9?`Rp${fmt(v/1e9,0)}억`:`Rp${fmt(v/1e6,0)}백만`;const k=v/IDRKRW,ks=Math.abs(k)>=1e12?`${fmt(k/1e12,2)}조원`:Math.abs(k)>=1e8?`${fmt(k/1e8,0)}억원`:`${fmt(k/1e4,0)}만원`;return`${s}<span class="src"> ≈${ks}</span>`;}
-const LOGO_SRC=t=>[`https://assets.stockbit.com/logos/companies/${t}.png`,`https://www.idx.co.id/Portals/0/StaticData/ListedCompanies/Logo/${t}.png`];
-function logo(t,n){const init=(t||'?').slice(0,1);const hue=[...(t||'')].reduce((a,c)=>a+c.charCodeAt(0),0)%360;
-  return`<div class="logo" style="background:hsl(${hue},45%,92%);color:hsl(${hue},45%,35%)" data-t="${t}"><img alt="" data-i="0" onload="this.parentNode.classList.add('has')" onerror="logoErr(this)" src="${LOGO_SRC(t)[0]}"><span>${init}</span></div>`;}
-function logoErr(img){const t=img.parentNode.dataset.t,i=+img.dataset.i+1,c=LOGO_SRC(t);if(i<c.length){img.dataset.i=i;img.src=c[i];}else{img.parentNode.classList.remove('has');}}
+const DOMAINS={BBCA:"bca.co.id",BBRI:"bri.co.id",BMRI:"bankmandiri.co.id",BBNI:"bni.co.id",BBTN:"btn.co.id",BRIS:"bankbsi.co.id",TLKM:"telkom.co.id",ISAT:"ioh.co.id",EXCL:"xlaxiata.co.id",ASII:"astra.co.id",UNVR:"unilever.co.id",ICBP:"indofoodcbp.com",INDF:"indofood.com",AMRT:"alfamart.co.id",MAPI:"map.co.id",ACES:"acehardware.co.id",KLBF:"kalbe.co.id",SIDO:"sidomuncul.co.id",CPIN:"cp.co.id",JPFA:"japfacomfeed.co.id",ADRO:"alamtri.com",AADI:"adaro.com",PTBA:"ptba.co.id",ITMG:"itmg.co.id",BUMI:"bumiresources.com",INDY:"indikaenergy.co.id",MEDC:"medcoenergi.com",PGAS:"pgn.co.id",AKRA:"akr.co.id",PGEO:"pge.pertamina.com",BRPT:"barito.co.id",TPIA:"chandra-asri.com",BREN:"baritorenewables.co.id",DSSA:"dssa.co.id",INCO:"vale.com",ANTM:"antam.com",MDKA:"merdekacoppergold.com",MBMA:"merdekabattery.com",NCKL:"harita-nickel.com",AMMN:"amman.co.id",TINS:"timah.com",EMAS:"merdekagold.com",SMGR:"sig.id",INTP:"indocement.co.id",UNTR:"unitedtractors.com",HRTA:"hartadinata.com",GOTO:"gotocompany.com",BUKA:"bukalapak.com",EMTK:"emtek.co.id",DCII:"dci-indonesia.com",DNET:"indoritel.com",SCMA:"scm.co.id",MNCN:"mncgroup.com",TOWR:"ptsmn.co.id",MTEL:"mitratel.co.id",JSMR:"jasamarga.com",PTRO:"petrosea.com",CUAN:"petrindo.co.id",DEWA:"ptdh.co.id",BRMS:"bumiresourcesminerals.com",ENRG:"energi-mp.com",INKP:"asiapulppaper.com",TKIM:"asiapulppaper.com",SRTG:"saratoga-investama.com",BSDE:"sinarmasland.com",CTRA:"ciputra.com",PWON:"pakuwonjati.com",SMRA:"summarecon.com",MIKA:"mitrakeluarga.com",HEAL:"herminahospitals.com",ARTO:"jago.com",BFIN:"bfi.co.id",BSIM:"banksinarmas.com",KOTA:"dmspropertindo.com",DMAS:"puradelta.com",VKTR:"vktr.co.id",BYAN:"bayan.com.sg"};
+const LOGO_SRC=t=>{const c=[`https://assets.stockbit.com/logos/companies/${t}.png`];if(DATA&&DATA.logos&&DATA.logos[t])c.unshift(DATA.logos[t]);if(DOMAINS[t])c.push(`https://www.google.com/s2/favicons?domain=${DOMAINS[t]}&sz=128`);c.push(`https://www.idx.co.id/Portals/0/StaticData/ListedCompanies/Logo/${t}.png`);return c;};
+const LOGO_OK={};   // t → url(성공) | null(전부 실패)
+function logo(t,n){const init=(t||'?').slice(0,1);const hue=[...(t||'')].reduce((a,c)=>a+c.charCodeAt(0),0)%360;const known=LOGO_OK[t];
+  if(known===null)return`<div class="logo" style="background:hsl(${hue},45%,92%);color:hsl(${hue},45%,35%)" data-tk="${t}"><span>${init}</span></div>`;
+  return`<div class="logo" style="background:hsl(${hue},45%,92%);color:hsl(${hue},45%,35%)" data-tk="${t}"><span>${init}</span><img alt="" loading="eager" referrerpolicy="no-referrer" data-i="0" onload="LOGO_OK['${t}']=this.src" onerror="logoErr(this)" src="${known||LOGO_SRC(t)[0]}"></div>`;}
+function logoErr(img){const t=img.parentNode.dataset.tk,i=+img.dataset.i+1,c=LOGO_SRC(t);if(i<c.length){img.dataset.i=i;img.src=c[i];}else{LOGO_OK[t]=null;img.remove();}}
 function spark(arr,prev,inv){if(!arr||arr.length<2)return'';const W=300,H=64,p=4,mn=Math.min(...arr,prev),mx=Math.max(...arr,prev),y=v=>H-p-((v-mn)/((mx-mn)||1))*(H-2*p),x=i=>p+i*(W-2*p)/(arr.length-1);
   const last=arr[arr.length-1],good=inv?last<=prev:last>=prev,col=good?'var(--up)':'var(--dn)',id='g'+Math.random().toString(36).slice(2,7);
   const pts=arr.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
@@ -367,8 +369,12 @@ function ixCard(x){const dec=x.code==='USDIDR'?0:2,unit=x.code==='USDIDR'?'':'pt
   <div class="px num" data-px="${x.px}">${fmt(x.px,dec)}</div>
   <div class="chg num">${sg(x.pct,2,'%',x.inv)} <span class="num ${(x.inv?-chg:chg)>0?'up':(x.inv?-chg:chg)<0?'dn':'flat'}">${chg>0?'+':''}${fmt(chg,dec)}${unit}</span></div>
   <div class="prevc num">${T('prevClose')} ${fmt(x.prev,dec)}${unit}</div>${spark(x.spark,x.prev,x.inv)}</div>`;}
-function updateIx(x){const el=$('ix-'+x.code);if(!el){return;}const old=+el.querySelector('.px').dataset.px;const card=document.createElement('div');card.innerHTML=ixCard(x);el.replaceWith(card.firstElementChild);
+const LIVE={};      // code → 마지막 성공 라이브 값 (실패해도 유지)
+function updateIx(x){const el=$('ix-'+x.code);if(!el){return;}const old=+el.querySelector('.px').dataset.px;
+  if(old===x.px){const b=el.querySelector('.live');if(b&&x.live){b.textContent=`${T('now')} · 15${T('delay')}${x.asof?' · '+x.asof:''}`;b.classList.remove('off');}return;}   // 값 같으면 숫자 갱신 없이 시각만
+  const card=document.createElement('div');card.innerHTML=ixCard(x);el.replaceWith(card.firstElementChild);
   if(old&&old!==x.px){const p=$('ix-'+x.code).querySelector('.px');p.classList.add(x.px>old?'flash-up':'flash-dn');setTimeout(()=>p.classList.remove('flash-up','flash-dn'),900);}}
+function mergeLive(list){return (list||[]).map(x=>{const l=LIVE[x.code];return (l&&(!x.live||l.t>=(x.t||0)))?{...x,...l}:x;});}
 
 /* ---------- 브라우저 직접 실시간 (Yahoo chart API · CORS 프록시 경유) ---------- */
 const LIVE_SYMS=[{sym:'^JKSE',code:'COMPOSITE',label:'IHSG'},{sym:'^JKLQ45',code:'LQ45',label:'LQ45'},{sym:'USDIDR=X',code:'USDIDR',label:'USD/IDR',inv:true}];
@@ -378,42 +384,49 @@ let proxyIdx=0,liveOk=false;
 async function yahooChart(sym){const url=`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?interval=1m&range=1d&includePrePost=false`;
   for(let k=0;k<PROXIES.length;k++){const p=(proxyIdx+k)%PROXIES.length;try{const ctl=new AbortController();setTimeout(()=>ctl.abort(),8000);const r=await fetch(PROXIES[p](url),{signal:ctl.signal,cache:'no-store'});if(!r.ok)throw 0;const j=await r.json();const res=j.chart?.result?.[0];if(!res)throw 0;proxyIdx=p;return res;}catch(e){}}
   return null;}
+let liveFail=0,liveLast=null;
 async function liveIndices(){let any=false;for(const s of LIVE_SYMS){const res=await yahooChart(s.sym);if(!res)continue;const m=res.meta,cl=(res.indicators?.quote?.[0]?.close||[]).filter(v=>v!=null);const px=m.regularMarketPrice??cl[cl.length-1];const prev=m.chartPreviousClose??m.previousClose;if(!px||!prev)continue;
     const ts=new Date((m.regularMarketTime||Date.now()/1000)*1000+7*3600e3).toISOString().slice(11,16);
-    updateIx({code:s.code,label:s.label,px:px,prev:prev,pct:(px/prev-1)*100,spark:cl.slice(-120),inv:s.inv,live:true,asof:ts});any=true;}
-  liveOk=any;if(any){$('dot').className='dot';$('mode').textContent=`${T('live')} · 15${T('delay')} · Yahoo`;}
-  else if(!DATA||DATA.mode==='demo'){$('dot').className='dot demo';$('mode').textContent=(DATA&&DATA.mode==='demo'?T('demo'):'')+' · '+(LIVE_PROXY?'proxy 응답 없음':'실시간 프록시 연결 실패 (Worker 미설정)');}}
+    const x={code:s.code,label:s.label,px:px,prev:prev,pct:(px/prev-1)*100,spark:cl.slice(-120),inv:s.inv,live:true,asof:ts,t:Date.now()};LIVE[s.code]=x;updateIx(x);any=true;}
+  liveOk=any;
+  if(any){liveFail=0;liveLast=new Date();$('dot').className='dot';$('mode').textContent=`${T('live')} · 15${T('delay')} · Yahoo`;}
+  else{liveFail++;const keep=Object.keys(LIVE).length;   // 실패해도 마지막 값 유지 — 지우지 않는다
+    if(keep){$('dot').className='dot demo';$('mode').textContent=`${T('live')} · ${T('lastOk')} ${liveLast?liveLast.toTimeString().slice(0,5):'—'} (${T('retry')})`;}
+    else if(!DATA||DATA.mode==='demo'){$('dot').className='dot demo';$('mode').textContent=(DATA&&DATA.mode==='demo'?T('demo'):'')+' · '+(LIVE_PROXY?'proxy 응답 없음':T('noProxy'));}}
+}
 
 /* ---------- 렌더: 증시 ---------- */
 function stockRow(o,i,kind){const bad=o.px==null;const sub=kind==='turnover'?`${o.t} · ${T('ratio20')} ${fmt(o.ratio,1)}×`:kind==='foreign'?`${o.t}`:`${o.t} · ${T('turnoverK')} ${o.val==null?'—':idr(o.val).replace(/<span.*<\/span>/,'')}`;
   const right=kind==='foreign'?`<b class="num ${o.fnet>=0?'up':'dn'}">${o.fnet>=0?'+':'−'}Rp${fmt(Math.abs(o.fnet)/1e9,0)}억</b><small class="src">≈${fmt(Math.abs(o.fnet)/IDRKRW/1e8,0)}억원</small>`
     :`<b class="num">${bad?'<span class="chk">확인 필요</span>':'Rp'+fmt(o.px,0)}</b><small class="num">${sg(o.pct)}</small>`;
   return`<div class="row" onclick="openDr('${o.t}')"><span class="rk ${i<3?'top':''}">${i+1}</span>${logo(o.t,o.n)}<div class="nm"><b>${o.n||o.t}</b><small>${sub}</small></div><div class="px">${right}</div><span class="heart">♡</span></div>`;}
-function renderRank(){const list=DATA[rankKey]||[];$('rank').innerHTML=list.length?list.slice(0,10).map((o,i)=>stockRow(o,i,rankKey)).join(''):`<div class="empty">${T('noData')}</div>`;
+function renderRank(){const list=DATA[rankKey]||[];if(changed('rank',[rankKey,list,LANG]))$('rank').innerHTML=list.length?list.slice(0,10).map((o,i)=>stockRow(o,i,rankKey)).join(''):`<div class="empty">${T('noData')}</div>`;
   const lab={value:T('labValue'),gainers:T('labG'),losers:T('labL'),turnover:T('labT')};
   $('rank-sub').textContent=`${lab[rankKey]} · ${DATA.index?.session||''}`;}
+const H={};const changed=(k,v)=>{const j=JSON.stringify(v);if(H[k]===j)return false;H[k]=j;return true;};
 function render(d){DATA=d;IDRKRW=d.idr_per_krw||IDRKRW;const demo=d.mode==='demo';
-  $('dot').className='dot'+(demo?' demo':'');$('mode').textContent=demo?T('demo'):`${T('live')} · 15${T('delay')}`;
+  if(!liveOk){$('dot').className='dot'+(demo?' demo':'');$('mode').textContent=demo?T('demo'):`${T('live')} · 15${T('delay')}`;}
   $('updated').textContent=d.updated||'—';$('fxbasis').textContent=d.fx_basis||'—';
   const hot=(d.news||[])[0];$('hot').textContent=hot?`${hot.src} · ${hot.t}`:'—';$('hotcnt').textContent=`1 / ${(d.news||[]).length}`;
   // 지수
   $('ixsess').textContent=d.index?.session||'';
   const i=d.index||{};const fn=i.foreign_net_idr;
   const ixName={COMPOSITE:T('ixIHSG'),LQ45:T('ixLQ'),USDIDR:T('ixFX')};
-  $('idx').innerHTML=(d.indices||[]).slice(0,3).map(x=>ixCard(x)).join('')
+  const ixs=mergeLive((d.indices||[]).slice(0,3));
+  if(changed('idx',[ixs,LANG,i.foreign_net_idr,i.foreign_date]))$('idx').innerHTML=ixs.map(x=>ixCard(x)).join('')
    +`<div class="ix"><div class="lbl"><span>${T('fnetAll')}</span><span class="pill">${i.foreign_date||T('prevLabel')}</span></div><div class="px num ${fn==null?'':fn>=0?'up':'dn'}">${fn==null?'<span class="chk" style="font-size:16px">확인 필요</span>':(fn>=0?'+':'−')+'Rp'+fmt(Math.abs(fn)/1e9,0)+'억'}</div><div class="chg num">${fn==null?'':'≈'+fmt(Math.abs(fn)/IDRKRW/1e8,0)+'억원'}</div><div class="fmeta">${T('buy')} ${i.foreign_buy==null?'—':'Rp'+fmt(i.foreign_buy/1e12,2)+'T'} · ${T('sell')} ${i.foreign_sell==null?'—':'Rp'+fmt(i.foreign_sell/1e12,2)+'T'}<br>${(d.foreign_top||[]).slice(0,3).map(o=>`<span class="tag" onclick="openDr('${o.t}')">${o.t}</span>`).join(' ')} ${T('netbuy')} &nbsp; ${(d.foreign_bottom||[]).slice(0,3).map(o=>`<span class="tag" style="background:var(--dnbg);color:var(--dn)" onclick="openDr('${o.t}')">${o.t}</span>`).join(' ')} ${T('sell')}</div></div>`;
   $('kv').innerHTML=[[T('advdec'),`<span class="up">${i.adv??'—'}</span> / <span class="dn">${i.dec??'—'}</span> / ${i.unch??'—'}`],[T('turnoverK'),idr(i.value_idr)],[T('hilo'),`${fmt(i.high)} / ${fmt(i.low)}`],[T('vol'),i.volume?`${fmt(i.volume/1e9,2)}B`:'—'],[T('ytd'),sg(i.ytd)],[T('m1'),sg(i.m1)],[T('range'),i.high&&i.low?`${fmt(i.high-i.low,2)}p (${fmt((i.high-i.low)/(i.prev||d.indices?.[0]?.prev||1)*100,2)}%)`:'—'],[T('fPrev'),fn==null?'<span class="chk">확인 필요</span>':`<span class="${fn>=0?'up':'dn'}">${fn>=0?'+':'−'}Rp${fmt(Math.abs(fn)/1e9,0)}억</span>`]].map(([k,v])=>`<div><span>${k}</span><b class="num">${v}</b></div>`).join('');
   // 외국인
   $('fdate').textContent=(i.foreign_date||'')+' · '+T('prevday');$('fnote').textContent=i.foreign_note||'';
   $('fx').innerHTML=`<div><span>${T('netbuy')}</span><b class="num ${fn==null?'':fn>=0?'up':'dn'}">${fn==null?'<span class="chk">확인 필요</span>':(fn>=0?'+':'−')+idr(Math.abs(fn))}</b></div><div><span>${T('buy')}</span><b class="num">${i.foreign_buy==null?'—':idr(i.foreign_buy).replace(/<span.*<\/span>/,'')}</b></div><div><span>${T('sell')}</span><b class="num">${i.foreign_sell==null?'—':idr(i.foreign_sell).replace(/<span.*<\/span>/,'')}</b></div>`;
-  $('ftop').innerHTML=(d.foreign_top||[]).slice(0,5).map((o,k)=>stockRow(o,k,'foreign')).join('')||`<div class="empty">${T('noData')}</div>`;
-  $('fbot').innerHTML=(d.foreign_bottom||[]).slice(0,5).map((o,k)=>stockRow(o,k,'foreign')).join('')||`<div class="empty">${T('noData')}</div>`;
+  if(changed('ftop',[d.foreign_top,LANG]))$('ftop').innerHTML=(d.foreign_top||[]).slice(0,5).map((o,k)=>stockRow(o,k,'foreign')).join('')||`<div class="empty">${T('noData')}</div>`;
+  if(changed('fbot',[d.foreign_bottom,LANG]))$('fbot').innerHTML=(d.foreign_bottom||[]).slice(0,5).map((o,k)=>stockRow(o,k,'foreign')).join('')||`<div class="empty">${T('noData')}</div>`;
   renderRank();
   // 지표
   $('macro').innerHTML=(d.macro||[]).map(m=>`<tr><td>${m.k}${m.note?`<span class="n2">${m.note}</span>`:''}</td><td class="r num">${String(m.v).includes('확인')?`<span class="chk">${m.v}</span>`:m.v}</td><td class="r num" style="width:70px">${m.d==null?'<span class="flat">—</span>':`<span class="badge ${(m.inv?-m.d:m.d)>0?'up':'dn'}">${m.d>0?'+':''}${fmt(m.d)}%</span>`}</td><td class="r num" style="width:70px">${sg(m.ytd,2,'%',m.inv)}</td></tr>`).join('');
   // 오늘 일정
   const td=(d.calendar||[]).filter(e=>e.date===today());$('today-ev').innerHTML=td.length?td.map(ev).join(''):`<div class="empty">${T('noEv')}</div>`;
-  $('ann').innerHTML=(d.announcements||[]).slice(0,12).map(a=>`<div class="row"><span class="tm">${a.date===today()?a.time:a.date.slice(5).replace('-','/')}</span>${logo(a.t)}<div class="nm"><span class="ty">${a.t}${a.type?' · '+a.type:''}</span><b><a href="${a.url||'#'}" target="_blank" rel="noopener">${a.title}</a></b></div></div>`).join('')||`<div class="empty">${T('noAnn')}</div>`;
+  if(changed('ann',[d.announcements,LANG]))$('ann').innerHTML=(d.announcements||[]).slice(0,12).map(a=>`<div class="row"><span class="tm">${a.date===today()?a.time:a.date.slice(5).replace('-','/')}</span>${logo(a.t)}<div class="nm"><span class="ty">${a.t}${a.type?' · '+a.type:''}</span><b><a href="${a.url||'#'}" target="_blank" rel="noopener">${a.title}</a></b></div></div>`).join('')||`<div class="empty">${T('noAnn')}</div>`;
   renderNews();$('news-preview').innerHTML=(d.news||[]).slice(0,14).map(newsItem).join('')||'<div class="empty">뉴스 없음</div>';
   if(!calDate)calDate=today();renderCal();
   $('foot').innerHTML=`${T('foot')} &nbsp;|&nbsp; ${T('footChk')} <span class="chk">${T('chk')}</span> ${T('footChk2')}`;applyStatic();}
@@ -421,9 +434,9 @@ function render(d){DATA=d;IDRKRW=d.idr_per_krw||IDRKRW;const demo=d.mode==='demo
 /* ---------- 뉴스 ---------- */
 function newsItem(n){return`<div class="n-item"><div class="t">${n.time}</div><div class="b"><a href="${n.url||'#'}" target="_blank" rel="noopener">${n.t}</a><div class="m">${(n.tags||[]).map(t=>`<span class="tag ${t===newsTag?'on':''}" onclick="setTag('${t}')">${t}</span>`).join('')}<span class="src">${n.src}${n.date?' · '+n.date.slice(5).replace('-','/'):''}</span></div></div></div>`;}
 function renderNews(){const all=DATA.news||[];const tags={};all.forEach(n=>(n.tags||[]).forEach(t=>tags[t]=(tags[t]||0)+1));
-  $('newsfilt').innerHTML=Object.entries(tags).sort((a,b)=>b[1]-a[1]).slice(0,14).map(([t,c])=>`<span class="pill sm ${t===newsTag?'on':''}" onclick="setTag('${t}')">${t} ${c}</span>`).join('');
+  $('newsfilt').innerHTML=Object.entries(tags).sort((a,b)=>b[1]-a[1]).map(([t,c])=>`<span class="pill sm ${t===newsTag?'on':''}" onclick="setTag('${t}')">${t} ${c}</span>`).join('');
   document.querySelector('.news-tools .pill[data-f=""]').classList.toggle('on',!newsTag);
-  const list=all.filter(n=>!newsTag||(n.tags||[]).includes(newsTag));$('news').innerHTML=list.map(newsItem).join('')||`<div class="empty">${T('noNewsTag')}</div>`;}
+  const list=all.filter(n=>!newsTag||(n.tags||[]).includes(newsTag));if(changed('news',[list,LANG,newsTag]))$('news').innerHTML=list.map(newsItem).join('')||`<div class="empty">${T('noNewsTag')}</div>`;}
 function setTag(t){newsTag=newsTag===t?null:t;showView('news');renderNews();}
 document.querySelector('.news-tools .pill[data-f=""]').onclick=()=>{newsTag=null;renderNews();};
 
@@ -463,11 +476,13 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDr();});
 
 document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('on',b.dataset.lang===LANG));applyStatic();
 /* ---------- 폴링 ---------- */
-let left=60;
-async function load(){try{const r=await fetch('data.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw 0;const d=await r.json();(d.indices||[]).forEach(x=>{x.live=/지연|tunda/.test(x.asof||'');});render(d);}catch(e){if(!DATA)render(window.DEMO_DATA);}
-  liveIndices();left=60;}
+let left=60,liveTimer=null;
+async function load(){try{const r=await fetch('data.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw 0;const d=await r.json();(d.indices||[]).forEach(x=>{x.live=/지연|tunda/.test(x.asof||'');x.t=0;});render(d);}catch(e){if(!DATA)render(window.DEMO_DATA);}
+  left=60;}
+async function liveLoop(){await liveIndices();const wait=liveOk?30000:Math.min(120000,30000*Math.pow(2,Math.min(liveFail,2)));liveTimer=setTimeout(liveLoop,wait);}
 setInterval(()=>{left--;if(left<=0)load();$('countdown').textContent=left;},1000);
-load();
+load().then(liveLoop);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){clearTimeout(liveTimer);liveLoop();}});
 </script>
 </body>
 </html>

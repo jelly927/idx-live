@@ -67,10 +67,16 @@ class IDX:
         self.s.get(self.BASE + "/primary/home/GetIndexList", headers={"X-Requested-With": "XMLHttpRequest"}, timeout=30)
         self.ready = True
     def get(self, path, **params):
-        self.session()
+        import os
+        proxy = os.environ.get("IDX_PROXY")            # Cloudflare Worker 주소. GitHub 러너 IP가 IDX에 막히면 Worker 경유
+        if not proxy: self.session()
         for i in range(3):
             try:
-                r = self.s.get(self.BASE + path, params=params, headers={"X-Requested-With": "XMLHttpRequest"}, timeout=40)
+                if proxy:
+                    full = requests.Request("GET", self.BASE + path, params=params).prepare().url
+                    r = requests.get(proxy.rstrip("/") + "/?url=" + requests.utils.quote(full, safe=""), timeout=40)
+                else:
+                    r = self.s.get(self.BASE + path, params=params, headers={"X-Requested-With": "XMLHttpRequest"}, timeout=40)
                 if r.status_code == 200: return r.json()
                 log("IDX", r.status_code, path)
             except Exception as e:
@@ -400,21 +406,87 @@ def macro_block(bi):
     return out
 
 # =============================================================== news
-ALIAS = {}
-for t, names in TICKERS.items():
-    ALIAS[t] = re.compile(r"\b" + t + r"\b")
-    for n in names:
-        if len(n) >= 4: ALIAS[t + "|" + n] = re.compile(re.escape(n), re.I)
-def screen(text):
-    return sorted({k.split("|")[0] for k, rx in ALIAS.items() if rx.search(text)})
+STOP = {"PT", "TBK", "IDX", "BEI", "OJK", "RUPS", "IPO", "ETF", "SBN", "SUN", "USD", "IDR", "HAJI", "DANA", "BANK", "SAHAM", "EMAS", "ASIA", "CPO", "LNG", "BUMN", "ASEAN", "MSCI", "FTSE", "APBN", "OPEC", "NYSE", "GDP", "CEO", "CFO", "BPS", "AS", "CNBC", "ANTM"}
+def all_tickers():
+    """IDX 전체 상장 종목 (코드 → 회사명). 하루 1회 캐시. 실패 시 tickers.json 만 사용."""
+    f = CACHE / "tickers_all.json"
+    if f.exists() and (time.time() - f.stat().st_mtime) < 86400:
+        return json.loads(f.read_text(encoding="utf-8"))
+    j = idx.get("/primary/ListedCompany/GetCompanyProfiles", start=0, length=9999)
+    rows = (j or {}).get("data") or []
+    out = {}
+    for r in rows:
+        code = (r.get("KodeEmiten") or "").strip().upper(); name = (r.get("NamaEmiten") or "").strip()
+        if len(code) == 4 and name:
+            clean = re.sub(r"^PT\.?\s+|\s+Tbk\.?$|\s*\(Persero\)\s*", " ", name, flags=re.I).strip()
+            out[code] = [clean]
+    if out:
+        f.write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8"); log("tickers_all", len(out))
+        return out
+    return {}
 
-def news_block(max_items=40):
-    items = []
+def build_alias():
+    universe = dict(all_tickers()); 
+    for t, names in TICKERS.items(): universe[t] = list(dict.fromkeys((universe.get(t) or []) + names))
+    codes = set(universe) - STOP
+    code_rx = re.compile(r"\b([A-Z]{4})\b")
+    name_rx = []
+    for t, names in universe.items():
+        for n in names:
+            if len(n) >= 6 and n.upper() not in STOP:      # 짧은 회사명은 오탐이 많아 6자 이상만
+                name_rx.append((t, re.compile(r"\b" + re.escape(n) + r"\b", re.I)))
+    return codes, code_rx, name_rx
+CODES, CODE_RX, NAME_RX = set(), None, []
+def screen(text):
+    hits = {c for c in CODE_RX.findall(text) if c in CODES} if CODE_RX else set()
+    for t, rx in NAME_RX:
+        if rx.search(text): hits.add(t)
+    return sorted(hits)
+
+def discover_rss(src):
+    """rss 가 비어 있으면 홈에서 <link rel=alternate type=application/rss+xml> 탐색 (캐시)."""
+    f = CACHE / "rss_map.json"; mp = json.loads(f.read_text()) if f.exists() else {}
+    if src["name"] in mp: return mp[src["name"]]
+    found = None
+    try:
+        h = requests.get(src.get("home", src["rss"]), headers={"User-Agent": UA}, timeout=20).text
+        m = re.search(r'<link[^>]+type="application/(?:rss|atom)\+xml"[^>]+href="([^"]+)"', h, re.I) or re.search(r'href="([^"]+)"[^>]+type="application/(?:rss|atom)\+xml"', h, re.I)
+        if m:
+            found = m.group(1)
+            if found.startswith("/"): found = re.match(r"https?://[^/]+", src.get("home", src["rss"])).group(0) + found
+    except Exception as e: log("discover fail", src["name"], e)
+    mp[src["name"]] = found; f.write_text(json.dumps(mp)); return found
+
+def scrape_home(src, limit=25):
+    """RSS 가 전혀 없는 매체: 홈의 기사 링크 텍스트를 헤드라인으로 (제목 25자 이상 anchor)."""
+    try:
+        h = requests.get(src["home"], headers={"User-Agent": UA}, timeout=20).text
+        base = re.match(r"https?://[^/]+", src["home"]).group(0); out = []; seen = set()
+        for m in re.finditer(r'<a[^>]+href="([^"#]+)"[^>]*>([^<]{25,140})</a>', h):
+            url, title = m.group(1), html.unescape(m.group(2)).strip()
+            if title in seen: continue
+            seen.add(title); out.append({"title": title, "link": url if url.startswith("http") else base + url, "summary": ""})
+            if len(out) >= limit: break
+        return out
+    except Exception as e: log("scrape fail", src["name"], e); return []
+
+def news_block(max_items=None):
+    global CODES, CODE_RX, NAME_RX
+    CODES, CODE_RX, NAME_RX = build_alias()
+    max_items = max_items or CFG.get("news_max_items", 80); items = []
     for src in CFG["whitelist"]:
-        try: feed = feedparser.parse(src["rss"], request_headers={"User-Agent": UA})
-        except Exception as e: log("rss fail", src["name"], e); continue
-        if not feed.entries: log("rss empty", src["name"], src["rss"])
-        for e in feed.entries[:40]:
+        entries = []
+        for url in [u for u in (src.get("rss"), None) if u is not None]:
+            try: entries = feedparser.parse(url, request_headers={"User-Agent": UA}).entries
+            except Exception as e: log("rss fail", src["name"], e)
+        if not entries:
+            alt = discover_rss(src)
+            if alt and alt != src.get("rss"):
+                try: entries = feedparser.parse(alt, request_headers={"User-Agent": UA}).entries
+                except Exception: pass
+        if not entries:
+            entries = scrape_home(src); log("rss empty → home scrape", src["name"], len(entries))
+        for e in entries[:40]:
             title = html.unescape(e.get("title", "")).strip()
             summ = re.sub("<[^>]+>", " ", html.unescape(e.get("summary", "")))
             tags = screen(title + " " + summ)
