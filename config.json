@@ -1,0 +1,20 @@
+{
+  "_comment": "RSS 주소는 각 매체 사이트에서 실제 경로 확인 후 수정 (실행 시 검증 필요). ytd_base 는 2025-12-31 기준 (JCI 는 역산값 — IDX 공식 종가로 교체).",
+  "whitelist": [
+    {"name": "Kontan",        "rss": "https://rss.kontan.co.id/news/investasi"},
+    {"name": "Antara",        "rss": "https://www.antaranews.com/rss/ekonomi.xml"},
+    {"name": "Bisnis",        "rss": "https://www.bisnis.com/rss/market"},
+    {"name": "Tribunnews",    "rss": "https://www.tribunnews.com/rss/bisnis"},
+    {"name": "IDNFinancials", "rss": "https://www.idnfinancials.com/rss"},
+    {"name": "Kompas",        "rss": "https://money.kompas.com/rss"},
+    {"name": "IDXChannel",    "rss": "https://www.idxchannel.com/rss/market-news"}
+  ],
+  "news_only_with_ticker": true,
+  "min_value_idr": 1000000000,
+  "fx_basis": "FY26 YTD 누적환율 (KISI 시트, 매주 월 갱신)",
+  "idr_per_krw": 11.7705,
+  "ytd_base": {"JCI": 8646.46, "USDIDR": 16720, "KRWIDR": 11.6144, "SUN10Y": 6.1635, "Brent": 60.9},
+  "universe": ["BBCA","BBRI","BMRI","BBNI","BBTN","BRIS","TLKM","ISAT","EXCL","ASII","UNVR","ICBP","INDF","AMRT","MAPI","ACES","KLBF","SIDO","CPIN","JPFA",
+               "ADRO","AADI","PTBA","ITMG","BUMI","INDY","MEDC","PGAS","AKRA","PGEO","BRPT","TPIA","BREN","DSSA","INCO","ANTM","MDKA","MBMA","NCKL","AMMN","TINS","EMAS",
+               "SMGR","INTP","UNTR","HRTA","GOTO","BUKA","EMTK","DCII","DNET","SCMA","MNCN","TOWR","MTEL","JSMR","PTRO","CUAN","DEWA","BRMS","ENRG","INKP","TKIM","SRTG","BSDE","CTRA","PWON","SMRA","MIKA","HEAL","ARTO","BFIN","WIFI","BSIM","KOTA","DMAS"]
+}
